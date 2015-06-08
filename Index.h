@@ -15,6 +15,7 @@ class Index
 {
 public:
 	Index();
+	explicit Index(const std::string &language);
 	std::vector<DesktopEntry> appsForMime(const std::string &type);
 
 protected:
@@ -35,6 +36,7 @@ private:
 	std::map<std::string, DesktopEntry*> knownApplications_;
 	std::map<std::string, std::list<DesktopEntry*> > applicationsCache_;
 	std::vector<std::string> directories_;
+	std::string language_;
 };
 
 }

@@ -136,4 +136,56 @@ std::vector<std::string> getVariableValues(const std::string &name)
 	return split(value, ':');
 }
 
+std::string getLocaleValue(const ConfigReader &config, const std::string &group, const std::string &key, const std::string &language)
+{
+	lang wanted(language);
+	std::vector<std::string> localeKeys;
+
+	if (wanted.country.size() > 0 && wanted.modifier.size() > 0)
+	{
+		localeKeys.push_back(wanted.language + "_" + wanted.country + "@" + wanted.modifier);
+	}
+
+	if (wanted.country.size() > 0)
+	{
+		localeKeys.push_back(wanted.language + "_" + wanted.country);
+	}
+
+	if (wanted.modifier.size() > 0)
+	{
+		localeKeys.push_back(wanted.language + "@" + wanted.modifier);
+	}
+
+	localeKeys.push_back(wanted.language);
+
+	for (size_t i=0;i<localeKeys.size();++i)
+	{
+		std::string localeKey = key + "[" + localeKeys[i] + "]";
+
+		if (config.hasKey(group, localeKey))
+		{
+			return config.value(group, localeKey);
+		}
+	}
+
+	return config.value(group, key);
+}
+
+std::string alnums(const std::string &string, size_t begin)
+{
+	if (begin == std::string::npos || begin >= string.size())
+	{
+		return std::string();
+	}
+
+	size_t end = begin;
+
+	while (end < string.size() && std::isalnum(string.at(end)))
+	{
+		++end;
+	}
+
+	return string.substr(begin, end-begin);
+}
+
 }

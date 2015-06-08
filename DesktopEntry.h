@@ -9,14 +9,14 @@ namespace LibMimeApps
 
 struct DesktopEntry
 {
-	explicit DesktopEntry(const std::string &baseDirectory, const std::string &relative);
+	explicit DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language=std::string());
 
 	std::string name;
 	std::string icon;
 	std::string executable;
 	std::string identifier;
 	std::string path;
-	std::vector< std::string > types;
+	std::vector<std::string> types;
 };
 
 

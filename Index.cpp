@@ -13,6 +13,13 @@ Index::Index()
 	createBase();
 }
 
+Index::Index(const std::string &language):
+	language_(language)
+{
+	findDirectories();
+	createBase();
+}
+
 std::vector<DesktopEntry> Index::appsForMime(const std::string &type)
 {
 	std::vector<DesktopEntry> result;
@@ -131,7 +138,7 @@ void Index::processMimeApps(const std::string &path)
 
 void Index::processDesktopFile(const std::string &baseDirectory, const std::string &relative)
 {
-	DesktopEntry *entry = new DesktopEntry(baseDirectory, relative);
+	DesktopEntry *entry = new DesktopEntry(baseDirectory, relative, language_);
 	addApplication(entry);
 }
 
