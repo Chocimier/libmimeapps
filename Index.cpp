@@ -1,10 +1,5 @@
-#include <iostream>
-
 #include "Index.h"
-
-#include <algorithm>
-#include <fstream>
-
+#include "ConfigReader.h"
 #include "Tools.h"
 
 namespace LibMimeApps
@@ -103,55 +98,33 @@ void Index::processDesktopInDirectory(const std::string &baseDirectory, const st
 
 void Index::processMimeApps(const std::string &path)
 {
-	std::ifstream file(path.c_str());
-	std::string line;
-	bool added = false;
-	bool removed = false;
+	ConfigReader config(path);
+	std::vector<std::string> types;
 
-	while (std::getline(file, line))
+	types = config.keys("Added Associations");
+
+	for (size_t i=0;i<types.size();++i)
 	{
-		if (line.empty() || line.at(0) == '#' || std::isspace(line.at(0)))
-		{
-			continue;
-		}
-		else if (line == "[Added Associations]")
-		{
-			added = true;
-			removed = false;
-		}
-		else if (line == "[Removed Associations]")
-		{
-			added = false;
-			removed = true;
-		}
-		else if (line.at(0) == '[')
-		{
-			added = false;
-			removed = false;
-		}
-		else
-		{
-			std::vector<std::string> chuncks = split(line, '=');
-			std::string type = chuncks.at(0);
-			std::vector<std::string> identifiers = split(chuncks.at(1), ';');
+		std::vector<std::string> identifiers = split(config.value("Added Associations", types.at(i)), ';');
 
-			if (added)
+		for (int j=identifiers.size()-1;j>=0;--j)
+		{
+			if (knownApplications_.count(identifiers[j]) > 0)
 			{
-				for (std::vector<std::string>::reverse_iterator id=identifiers.rbegin();id!=identifiers.rend();++id)
-				{
-					if (knownApplications_.count(*id) > 0)
-					{
-						addToType(type, knownApplications_.at(*id));
-					}
-				}
+				addToType(types[i], knownApplications_.at(identifiers[j]));
 			}
-			else if (removed)
-			{
-				for (std::vector<std::string>::reverse_iterator id=identifiers.rbegin();id!=identifiers.rend();++id)
-				{
-					removeFromType(type, *id);
-				}
-			}
+		}
+	}
+
+	types = config.keys("Removed Associations");
+
+	for (size_t i=0;i<types.size();++i)
+	{
+		std::vector<std::string> identifiers = split(config.value("Removed Associations", types.at(i)), ';');
+
+		for (size_t j=0;j<identifiers.size();++j)
+		{
+			removeFromType(types[i], identifiers[j]);
 		}
 	}
 }

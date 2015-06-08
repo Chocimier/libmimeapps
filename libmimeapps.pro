@@ -13,11 +13,13 @@ DEFINES += LIBMIMEAPPS_LIBRARY
 
 SOURCES += DesktopEntry.cpp \
     Tools.cpp \
-    Index.cpp
+    Index.cpp \
+    ConfigReader.cpp
 
 HEADERS += DesktopEntry.h \
     Tools.h \
-	Index.h
+	Index.h \
+    ConfigReader.h
 
 unix {
     target.path = /usr/lib
