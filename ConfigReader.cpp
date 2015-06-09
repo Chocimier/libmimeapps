@@ -47,7 +47,7 @@ std::vector<std::string> ConfigReader::groups() const
 {
 	std::vector<std::string> result;
 
-	for (std::map< std::string, std::map<std::string, std::string> >::const_iterator it=values_.begin();it!=values_.end();++it)
+	for (std::map< std::string, std::map<std::string, std::string> >::const_iterator it = values_.begin(); it != values_.end(); ++it)
 	{
 		result.push_back(it->first);
 	}
@@ -69,7 +69,7 @@ std::vector<std::string> ConfigReader::keys(const std::string &group) const
 		return result;
 	}
 
-	for (std::map<std::string, std::string>::const_iterator it=values_.at(group).begin();it!=values_.at(group).end();++it)
+	for (std::map<std::string, std::string>::const_iterator it = values_.at(group).begin(); it != values_.at(group).end(); ++it)
 	{
 		result.push_back(it->first);
 	}
@@ -93,4 +93,3 @@ std::string ConfigReader::value(const std::string &group, const std::string &key
 }
 
 }
-

@@ -27,7 +27,7 @@ std::vector<DesktopEntry> Index::appsForMime(const std::string &type)
 	if (applicationsCache_.count(type) > 0)
 	{
 		std::list<DesktopEntry*> list = applicationsCache_.at(type);
-		for (std::list<DesktopEntry*>::iterator entry=list.begin();entry!=list.end();++entry)
+		for (std::list<DesktopEntry*>::iterator entry = list.begin(); entry != list.end(); ++entry)
 		{
 			result.push_back(**entry);
 		}
@@ -48,18 +48,18 @@ void Index::findDirectories()
 
 		again = false;
 
-		for (std::vector<std::string>::iterator directory=directories_.begin();directory!=directories_.end();++directory)
+		for (int i = 0; i < directories_.size(); ++i)
 		{
-			std::vector<std::string> unfolded = unfoldVariable(*directory);
+			std::vector<std::string> unfolded = unfoldVariable(directories_.at(i));
 
-			if (unfolded.size() > 0 && unfolded.at(0) != *directory)
+			if (unfolded.size() > 0 && unfolded.at(0) != directories_.at(i))
 			{
 				again = true;
 			}
 
-			for (std::vector<std::string>::iterator path=unfolded.begin();path!=unfolded.end();++path)
+			for (int j = 0; j < unfolded.size(); ++j)
 			{
-				directories.push_back(*path);
+				directories.push_back(unfolded.at(j));
 			}
 		}
 
@@ -70,9 +70,9 @@ void Index::findDirectories()
 
 void Index::createBase()
 {
-	for (std::vector<std::string>::iterator directory=directories_.begin();directory!=directories_.end();++directory)
+	for (int i = 0; i < directories_.size(); ++i)
 	{
-		processDirectory(*directory, std::string());
+		processDirectory(directories_.at(i), std::string());
 	}
 }
 
@@ -81,9 +81,9 @@ void Index::processDirectory(const std::string &baseDirectory, const std::string
 	std::string directory = baseDirectory + relative;
 	std::vector<std::string> subdirectories = directoryEntries(directory);
 
-	for (std::vector<std::string>::iterator a=subdirectories.begin();a!=subdirectories.end();++a)
+	for (size_t i = 0; i < subdirectories.size(); ++i)
 	{
-		processDirectory(baseDirectory, relative + *a + "/");
+		processDirectory(baseDirectory, relative + subdirectories.at(i) + "/");
 	}
 
 	processDesktopInDirectory(baseDirectory, relative);
@@ -94,11 +94,11 @@ void Index::processDesktopInDirectory(const std::string &baseDirectory, const st
 {
 	std::vector<std::string> filenames = directoryEntries(baseDirectory + relative);
 
-	for (std::vector<std::string>::iterator filename=filenames.begin();filename!=filenames.end();++filename)
+	for (size_t i = 0; i < filenames.size(); ++i)
 	{
-		if (endsWith(*filename, std::string(".desktop")))
+		if (endsWith(filenames.at(i), std::string(".desktop")))
 		{
-			processDesktopFile(baseDirectory, relative + *filename);
+			processDesktopFile(baseDirectory, relative + filenames.at(i));
 		}
 	}
 }
@@ -110,11 +110,11 @@ void Index::processMimeApps(const std::string &path)
 
 	types = config.keys("Added Associations");
 
-	for (size_t i=0;i<types.size();++i)
+	for (size_t i = 0; i < types.size(); ++i)
 	{
 		std::vector<std::string> identifiers = split(config.value("Added Associations", types.at(i)), ';');
 
-		for (int j=identifiers.size()-1;j>=0;--j)
+		for (int j = identifiers.size()-1; j >= 0; --j)
 		{
 			if (knownApplications_.count(identifiers[j]) > 0)
 			{
@@ -125,11 +125,11 @@ void Index::processMimeApps(const std::string &path)
 
 	types = config.keys("Removed Associations");
 
-	for (size_t i=0;i<types.size();++i)
+	for (size_t i = 0; i < types.size(); ++i)
 	{
 		std::vector<std::string> identifiers = split(config.value("Removed Associations", types.at(i)), ';');
 
-		for (size_t j=0;j<identifiers.size();++j)
+		for (size_t j = 0; j < identifiers.size(); ++j)
 		{
 			removeFromType(types[i], identifiers[j]);
 		}
@@ -144,16 +144,16 @@ void Index::processDesktopFile(const std::string &baseDirectory, const std::stri
 
 void Index::addApplication(DesktopEntry *entry)
 {
-	for (std::map<std::string, std::list<DesktopEntry*> >::iterator type=applicationsCache_.begin();type!=applicationsCache_.end();++type)
+	for (std::map<std::string, std::list<DesktopEntry*> >::iterator type = applicationsCache_.begin(); type != applicationsCache_.end(); ++type)
 	{
 		removeFromType(type->first, entry->identifier);
 	}
 
 	knownApplications_[entry->identifier] = entry;
 
-	for (std::vector<std::string>::iterator type=entry->types.begin();type!=entry->types.end();++type)
+	for (size_t i = 0; i < entry->types.size(); ++i)
 	{
-		addToType(*type, entry);
+		addToType(entry->types.at(i), entry);
 	}
 }
 
@@ -171,7 +171,7 @@ void Index::removeFromType(const std::string &type, const std::string &entryId)
 {
 	if (applicationsCache_.count(type) > 0)
 	{
-		for (std::list<DesktopEntry*>::iterator it=applicationsCache_.at(type).begin();it!=applicationsCache_.at(type).end();)
+		for (std::list<DesktopEntry*>::iterator it = applicationsCache_.at(type).begin(); it != applicationsCache_.at(type).end();)
 		{
 			if ((*it)->identifier == entryId)
 			{
@@ -198,4 +198,3 @@ std::vector<std::string> Index::initDirectoryPatterns()
 }
 
 }
-

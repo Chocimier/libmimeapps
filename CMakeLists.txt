@@ -1,9 +1,9 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 2.6)
 
-project (mimeapps)
+project(mimeapps)
 
-set (mimeapps_VERSION_MAJOR 0)
-set (mimeapps_VERSION_MINOR 3)
+set(mimeapps_VERSION_MAJOR 0)
+set(mimeapps_VERSION_MINOR 3)
 
 add_library(mimeapps
 	ConfigReader.cpp

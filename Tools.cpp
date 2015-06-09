@@ -102,7 +102,7 @@ std::vector<std::string> unfoldVariable(const std::string &string)
 
 	std::vector<std::string> values = getVariableValues(name);
 
-	for (std::vector<std::string>::iterator value=values.begin();value!=values.end();++value)
+	for (std::vector<std::string>::iterator value = values.begin(); value != values.end(); ++value)
 	{
 		result.push_back(string.substr(0, begin) + (*value) + string.substr(end));
 	}
@@ -158,7 +158,7 @@ std::string getLocaleValue(const ConfigReader &config, const std::string &group,
 
 	localeKeys.push_back(wanted.language);
 
-	for (size_t i=0;i<localeKeys.size();++i)
+	for (size_t i = 0; i < localeKeys.size(); ++i)
 	{
 		std::string localeKey = key + "[" + localeKeys[i] + "]";
 
