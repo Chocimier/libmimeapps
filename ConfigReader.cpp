@@ -50,7 +50,7 @@ ConfigReader::ConfigReader(const std::string &path)
 			if ((pos != std::string::npos) && (pos != (line.size()-1)))
 			{
 				std::string key(line.substr(0, pos));
-				std::string value(line.substr(pos+1));
+				std::string value = unescape(line.substr(pos+1));
 
 				values_[group][key] = value;
 			}
@@ -105,6 +105,51 @@ std::string ConfigReader::value(const std::string &group, const std::string &key
 	}
 
 	return values_.at(group).at(key);
+}
+
+std::string ConfigReader::unescape(const std::string &string)
+{
+	std::string result;
+
+	for (int i = 0; i < string.length(); ++i)
+	{
+		if (string.at(i) == '\\')
+		{
+			++i;
+			switch (string.at(i))
+			{
+			case 's':
+				result.push_back(' ');
+				break;
+
+			case 'n':
+				result.push_back('\n');
+				break;
+
+			case 't':
+				result.push_back('\t');
+				break;
+
+			case 'r':
+				result.push_back('\r');
+				break;
+
+			case '\\':
+				result.push_back('\\');
+				break;
+
+			default:
+				result.push_back('\\');
+				result.push_back(string.at(i));
+			}
+		}
+		else
+		{
+			result.push_back(string.at(i));
+		}
+	}
+
+	return result;
 }
 
 }
