@@ -42,6 +42,7 @@ protected:
 	void processDesktopFile(const std::string &baseDirectory, const std::string &relative);
 	void addApplication(DesktopEntry *entry);
 	void addToType(const std::string &type, DesktopEntry *entry);
+	void removeApplication(const std::string &entryId);
 	void removeFromType(const std::string &type, const std::string &entryId);
 	static std::list<std::string> resolveVariable(const std::string &name);
 	static std::vector<std::string> initDirectoryPatterns();

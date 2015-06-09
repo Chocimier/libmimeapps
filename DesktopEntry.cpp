@@ -36,6 +36,8 @@ DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &
 	icon = getLocaleValue(config, std::string("Desktop Entry"), std::string("Icon"), language);
 	executable = config.value(std::string("Desktop Entry"), std::string("Exec"));
 	types = split(config.value(std::string("Desktop Entry"), std::string("MimeType")), ';');
+	noDisplay = (config.value(std::string("Desktop Entry"), std::string("NoDisplay")) == std::string("true"));
+	hidden = (config.value(std::string("Desktop Entry"), std::string("Hidden")) == std::string("true"));
 }
 
 }

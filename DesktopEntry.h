@@ -32,8 +32,9 @@ struct DesktopEntry
 	std::string identifier;
 	std::string path;
 	std::vector<std::string> types;
+	bool noDisplay;
+	bool hidden;
 };
-
 
 }
 #endif

@@ -154,15 +154,20 @@ void Index::processMimeApps(const std::string &path)
 void Index::processDesktopFile(const std::string &baseDirectory, const std::string &relative)
 {
 	DesktopEntry *entry = new DesktopEntry(baseDirectory, relative, language_);
-	addApplication(entry);
+
+	if (entry->hidden)
+	{
+		removeApplication(entry->identifier);
+	}
+	else if (!entry->noDisplay)
+	{
+		addApplication(entry);
+	}
 }
 
 void Index::addApplication(DesktopEntry *entry)
 {
-	for (std::map<std::string, std::list<DesktopEntry*> >::iterator type = applicationsCache_.begin(); type != applicationsCache_.end(); ++type)
-	{
-		removeFromType(type->first, entry->identifier);
-	}
+	removeApplication(entry->identifier);
 
 	knownApplications_[entry->identifier] = entry;
 
@@ -180,6 +185,14 @@ void Index::addToType(const std::string &type, DesktopEntry *entry)
 	}
 
 	applicationsCache_[type].push_front(entry);
+}
+
+void Index::removeApplication(const std::string &entryId)
+{
+	for (std::map<std::string, std::list<DesktopEntry*> >::iterator type = applicationsCache_.begin(); type != applicationsCache_.end(); ++type)
+	{
+		removeFromType(type->first, entryId);
+	}
 }
 
 void Index::removeFromType(const std::string &type, const std::string &entryId)
