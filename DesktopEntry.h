@@ -22,18 +22,28 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 namespace LibMimeApps
 {
 
-struct DesktopEntry
+class DesktopEntry
 {
+public:
 	explicit DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language=std::string());
+	std::string name() const;
+	std::string icon() const;
+	std::string executable() const;
+	std::string identifier() const;
+	std::string path() const;
+	std::vector<std::string> types() const;
+	bool noDisplay() const;
+	bool hidden() const;
 
-	std::string name;
-	std::string icon;
-	std::string executable;
-	std::string identifier;
-	std::string path;
-	std::vector<std::string> types;
-	bool noDisplay;
-	bool hidden;
+private:
+	std::string name_;
+	std::string icon_;
+	std::string executable_;
+	std::string identifier_;
+	std::string path_;
+	std::vector<std::string> types_;
+	bool noDisplay_;
+	bool hidden_;
 };
 
 }

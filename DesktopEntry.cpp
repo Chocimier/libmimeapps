@@ -25,19 +25,59 @@ namespace LibMimeApps
 
 DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language)
 {
-	path = baseDirectory + relative;
-	identifier = relative;
+	path_ = baseDirectory + relative;
+	identifier_ = relative;
 
-	ConfigReader config(path);
+	ConfigReader config(path_);
 
-	std::replace(identifier.begin(), identifier.end(), '/', '-');
+	std::replace(identifier_.begin(), identifier_.end(), '/', '-');
 
-	name = getLocaleValue(config, std::string("Desktop Entry"), std::string("Name"), language);
-	icon = getLocaleValue(config, std::string("Desktop Entry"), std::string("Icon"), language);
-	executable = config.value(std::string("Desktop Entry"), std::string("Exec"));
-	types = split(config.value(std::string("Desktop Entry"), std::string("MimeType")), ';');
-	noDisplay = (config.value(std::string("Desktop Entry"), std::string("NoDisplay")) == std::string("true"));
-	hidden = (config.value(std::string("Desktop Entry"), std::string("Hidden")) == std::string("true"));
+	name_ = getLocaleValue(config, std::string("Desktop Entry"), std::string("Name"), language);
+	icon_ = getLocaleValue(config, std::string("Desktop Entry"), std::string("Icon"), language);
+	executable_ = config.value(std::string("Desktop Entry"), std::string("Exec"));
+	types_ = split(config.value(std::string("Desktop Entry"), std::string("MimeType")), ';');
+	noDisplay_ = (config.value(std::string("Desktop Entry"), std::string("NoDisplay")) == std::string("true"));
+	hidden_ = (config.value(std::string("Desktop Entry"), std::string("Hidden")) == std::string("true"));
+}
+
+std::string DesktopEntry::name() const
+{
+	return name_;
+}
+
+std::string DesktopEntry::icon() const
+{
+	return icon_;
+}
+
+std::string DesktopEntry::executable() const
+{
+	return executable_;
+}
+
+std::string DesktopEntry::identifier() const
+{
+	return identifier_;
+}
+
+std::string DesktopEntry::path() const
+{
+	return path_;
+}
+
+std::vector<std::string> DesktopEntry::types() const
+{
+	return types_;
+}
+
+bool DesktopEntry::noDisplay() const
+{
+	return noDisplay_;
+}
+
+bool DesktopEntry::hidden() const
+{
+	return hidden_;
 }
 
 }

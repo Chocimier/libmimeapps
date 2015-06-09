@@ -155,11 +155,11 @@ void Index::processDesktopFile(const std::string &baseDirectory, const std::stri
 {
 	DesktopEntry *entry = new DesktopEntry(baseDirectory, relative, language_);
 
-	if (entry->hidden)
+	if (entry->hidden())
 	{
-		removeApplication(entry->identifier);
+		removeApplication(entry->identifier());
 	}
-	else if (!entry->noDisplay)
+	else if (!entry->noDisplay())
 	{
 		addApplication(entry);
 	}
@@ -167,13 +167,13 @@ void Index::processDesktopFile(const std::string &baseDirectory, const std::stri
 
 void Index::addApplication(DesktopEntry *entry)
 {
-	removeApplication(entry->identifier);
+	removeApplication(entry->identifier());
 
-	knownApplications_[entry->identifier] = entry;
+	knownApplications_[entry->identifier()] = entry;
 
-	for (size_t i = 0; i < entry->types.size(); ++i)
+	for (size_t i = 0; i < entry->types().size(); ++i)
 	{
-		addToType(entry->types.at(i), entry);
+		addToType(entry->types().at(i), entry);
 	}
 }
 
@@ -181,7 +181,7 @@ void Index::addToType(const std::string &type, DesktopEntry *entry)
 {
 	if (applicationsCache_.count(type) > 0)
 	{
-		removeFromType(type, entry->identifier);
+		removeFromType(type, entry->identifier());
 	}
 
 	applicationsCache_[type].push_front(entry);
@@ -201,7 +201,7 @@ void Index::removeFromType(const std::string &type, const std::string &entryId)
 	{
 		for (std::list<DesktopEntry*>::iterator it = applicationsCache_.at(type).begin(); it != applicationsCache_.at(type).end();)
 		{
-			if ((*it)->identifier == entryId)
+			if ((*it)->identifier() == entryId)
 			{
 				applicationsCache_.at(type).erase(it++);
 			}
