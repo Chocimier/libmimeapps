@@ -25,9 +25,11 @@ namespace LibMimeApps
 class DesktopEntry
 {
 public:
+	DesktopEntry();
 	explicit DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language=std::string());
 	bool execAllowMultipleUrl();
 	bool execAllowRemoteUrl();
+	static std::vector<std::string> parseExec(const std::string &executable, const std::vector<std::string> &urls=std::vector<std::string>());
 	std::vector<std::string> parseExec(const std::vector<std::string> &urls=std::vector<std::string>());
 	std::string name() const;
 	std::string icon() const;

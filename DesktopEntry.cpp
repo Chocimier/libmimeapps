@@ -23,6 +23,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 namespace LibMimeApps
 {
 
+DesktopEntry::DesktopEntry():
+	noDisplay_(false),
+	hidden_(false),
+	allowMultiple_(false),
+	allowRemote_(false)
+{
+}
+
 DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language):
 	noDisplay_(false),
 	hidden_(false),
@@ -56,6 +64,14 @@ bool DesktopEntry::execAllowRemoteUrl()
 	parseExec();
 
 	return allowRemote_;
+}
+
+std::vector<std::string> DesktopEntry::parseExec(const std::string &executable, const std::vector<std::string> &urls)
+{
+	DesktopEntry entry;
+	entry.executable_ = executable;
+
+	return entry.parseExec(urls);
 }
 
 std::vector<std::string> DesktopEntry::parseExec(const std::vector<std::string> &urls)
