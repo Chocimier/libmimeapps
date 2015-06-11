@@ -26,6 +26,9 @@ class DesktopEntry
 {
 public:
 	explicit DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language=std::string());
+	bool execAllowMultipleUrl();
+	bool execAllowRemoteUrl();
+	std::vector<std::string> parseExec(const std::vector<std::string> &urls=std::vector<std::string>());
 	std::string name() const;
 	std::string icon() const;
 	std::string executable() const;
@@ -44,6 +47,8 @@ private:
 	std::vector<std::string> types_;
 	bool noDisplay_;
 	bool hidden_;
+	bool allowMultiple_;
+	bool allowRemote_;
 };
 
 }

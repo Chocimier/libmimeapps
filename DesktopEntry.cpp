@@ -25,7 +25,9 @@ namespace LibMimeApps
 
 DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language):
 	noDisplay_(false),
-	hidden_(false)
+	hidden_(false),
+	allowMultiple_(false),
+	allowRemote_(false)
 {
 	path_ = baseDirectory + relative;
 	identifier_ = relative;
@@ -40,6 +42,114 @@ DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &
 	types_ = split(config.value(std::string("Desktop Entry"), std::string("MimeType")), ';');
 	noDisplay_ = (config.value(std::string("Desktop Entry"), std::string("NoDisplay")) == std::string("true"));
 	hidden_ = (config.value(std::string("Desktop Entry"), std::string("Hidden")) == std::string("true"));
+}
+
+bool DesktopEntry::execAllowMultipleUrl()
+{
+	parseExec();
+
+	return allowMultiple_;
+}
+
+bool DesktopEntry::execAllowRemoteUrl()
+{
+	parseExec();
+
+	return allowRemote_;
+}
+
+std::vector<std::string> DesktopEntry::parseExec(const std::vector<std::string> &urls)
+{
+	std::vector<std::string> result;
+	bool quoted = false;
+
+	result.push_back(std::string());
+
+	for (int i = 0; i < executable_.size();++i)
+	{
+		if (executable_.at(i) == ' ' && !quoted)
+		{
+			if (result.back().size() > 0)
+			{
+				result.push_back(std::string());
+			}
+		}
+		else if (executable_.at(i) == '"')
+		{
+			quoted = !quoted;
+		}
+		else if (executable_.at(i) == '\\')
+		{
+			++i;
+			result.back().push_back(executable_.at(i));
+		}
+		else if (executable_.at(i) == '%' && !quoted)
+		{
+			++i;
+			switch (executable_.at(i))
+			{
+			case 'u':
+				allowRemote_ = true;
+			case 'f':
+				if (urls.size() > 0)
+				{
+					result.back() += urls.front();
+				}
+				break;
+
+			case 'U':
+				allowRemote_ = true;
+			case 'F':
+				allowMultiple_ = true;
+
+				if (urls.size() > 0)
+				{
+					result.back() += urls.front();
+				}
+
+				for (int i = 1; i < urls.size(); ++i)
+				{
+					result.push_back(urls.at(i));
+				}
+
+				result.push_back(std::string());
+				break;
+
+			case 'i':
+				if (icon_.size() > 0)
+				{
+					result.push_back(std::string("--icon"));
+					result.push_back(icon_);
+					result.push_back(std::string());
+				}
+				break;
+
+			case 'c':
+				result.push_back(name_);
+				result.push_back(std::string());
+				break;
+
+			case 'k':
+				result.push_back(path_);
+				result.push_back(std::string());
+				break;
+
+			case '%':
+				result.back().push_back('%');
+				break;
+
+			default:
+				break;
+			}
+
+		}
+		else
+		{
+			result.back().push_back(executable_.at(i));
+		}
+	}
+
+	return result;
 }
 
 std::string DesktopEntry::name() const
