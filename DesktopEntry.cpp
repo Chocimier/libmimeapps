@@ -23,7 +23,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 namespace LibMimeApps
 {
 
-DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language)
+DesktopEntry::DesktopEntry(const std::string &baseDirectory, const std::string &relative, const std::string &language):
+	noDisplay_(false),
+	hidden_(false)
 {
 	path_ = baseDirectory + relative;
 	identifier_ = relative;
