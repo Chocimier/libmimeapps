@@ -79,7 +79,7 @@ void Index::findDirectories()
 
 		again = false;
 
-		for (int i = 0; i < directories_.size(); ++i)
+		for (std::vector<std::string>::size_type i = 0; i < directories_.size(); ++i)
 		{
 			std::vector<std::string> unfolded = unfoldVariable(directories_.at(i));
 
@@ -88,7 +88,7 @@ void Index::findDirectories()
 				again = true;
 			}
 
-			for (int j = 0; j < unfolded.size(); ++j)
+			for (std::vector<std::string>::size_type j = 0; j < unfolded.size(); ++j)
 			{
 				directories.push_back(unfolded.at(j));
 			}
@@ -101,7 +101,7 @@ void Index::findDirectories()
 
 void Index::createBase()
 {
-	for (int i = 0; i < directories_.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < directories_.size(); ++i)
 	{
 		processDirectory(directories_.at(i), std::string());
 	}
@@ -112,7 +112,7 @@ void Index::processDirectory(const std::string &baseDirectory, const std::string
 	std::string directory = baseDirectory + relative;
 	std::vector<std::string> subdirectories = directoryEntries(directory, FileType::Directory);
 
-	for (size_t i = 0; i < subdirectories.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < subdirectories.size(); ++i)
 	{
 		processDirectory(baseDirectory, relative + subdirectories.at(i) + "/");
 	}
@@ -125,7 +125,7 @@ void Index::processDesktopInDirectory(const std::string &baseDirectory, const st
 {
 	std::vector<std::string> filenames = directoryEntries(baseDirectory + relative, FileType::File);
 
-	for (size_t i = 0; i < filenames.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < filenames.size(); ++i)
 	{
 		if (endsWith(filenames.at(i), std::string(".desktop")))
 		{
@@ -141,7 +141,7 @@ void Index::processMimeApps(const std::string &path)
 
 	types = config.keys("Added Associations");
 
-	for (size_t i = 0; i < types.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < types.size(); ++i)
 	{
 		std::vector<std::string> identifiers = split(config.value("Added Associations", types.at(i)), ';');
 
@@ -156,11 +156,11 @@ void Index::processMimeApps(const std::string &path)
 
 	types = config.keys("Removed Associations");
 
-	for (size_t i = 0; i < types.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < types.size(); ++i)
 	{
 		std::vector<std::string> identifiers = split(config.value("Removed Associations", types.at(i)), ';');
 
-		for (size_t j = 0; j < identifiers.size(); ++j)
+		for (std::vector<std::string>::size_type j = 0; j < identifiers.size(); ++j)
 		{
 			removeFromType(types[i], identifiers[j]);
 		}
@@ -187,7 +187,7 @@ void Index::addApplication(DesktopEntry *entry)
 
 	knownApplications_[entry->identifier()] = entry;
 
-	for (size_t i = 0; i < entry->types().size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < entry->types().size(); ++i)
 	{
 		addToType(entry->types().at(i), entry);
 	}

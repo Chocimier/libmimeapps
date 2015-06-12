@@ -97,7 +97,7 @@ std::vector<std::string> DesktopEntry::parseExec(const std::vector<std::string> 
 
 	result.push_back(std::string());
 
-	for (int i = 0; i < executable_.size();++i)
+	for (std::string::size_type i = 0; i < executable_.size();++i)
 	{
 		if (executable_.at(i) == ' ' && !quoted)
 		{
@@ -139,7 +139,7 @@ std::vector<std::string> DesktopEntry::parseExec(const std::vector<std::string> 
 					result.back() += urls.front();
 				}
 
-				for (int i = 1; i < urls.size(); ++i)
+				for (std::vector<std::string>::size_type i = 1; i < urls.size(); ++i)
 				{
 					result.push_back(urls.at(i));
 				}

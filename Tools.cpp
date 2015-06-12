@@ -96,7 +96,7 @@ std::vector<std::string> directoryEntries(const std::string &directory, FileType
 	{
 		std::string name(entry->d_name);
 
-		if (name.size() > 0 && name.at(0) != '.' && (dirs == FileType::File && entry->d_type!=DT_DIR) || (dirs == FileType::Directory && entry->d_type!=DT_REG))
+		if (name.size() > 0 && name.at(0) != '.' && ((dirs == FileType::File && entry->d_type!=DT_DIR) || (dirs == FileType::Directory && entry->d_type!=DT_REG)))
 		{
 			result.push_back(name);
 		}
@@ -192,7 +192,7 @@ std::string getLocaleValue(const ConfigReader &config, const std::string &group,
 
 	localeKeys.push_back(wanted.language);
 
-	for (size_t i = 0; i < localeKeys.size(); ++i)
+	for (std::vector<std::string>::size_type i = 0; i < localeKeys.size(); ++i)
 	{
 		std::string localeKey = key + "[" + localeKeys[i] + "]";
 
