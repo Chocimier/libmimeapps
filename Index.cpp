@@ -110,7 +110,7 @@ void Index::createBase()
 void Index::processDirectory(const std::string &baseDirectory, const std::string &relative)
 {
 	std::string directory = baseDirectory + relative;
-	std::vector<std::string> subdirectories = directoryEntries(directory);
+	std::vector<std::string> subdirectories = directoryEntries(directory, FileType::Directory);
 
 	for (size_t i = 0; i < subdirectories.size(); ++i)
 	{
@@ -123,7 +123,7 @@ void Index::processDirectory(const std::string &baseDirectory, const std::string
 
 void Index::processDesktopInDirectory(const std::string &baseDirectory, const std::string &relative)
 {
-	std::vector<std::string> filenames = directoryEntries(baseDirectory + relative);
+	std::vector<std::string> filenames = directoryEntries(baseDirectory + relative, FileType::File);
 
 	for (size_t i = 0; i < filenames.size(); ++i)
 	{

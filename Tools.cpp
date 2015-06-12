@@ -80,7 +80,7 @@ bool match(std::string const& text, std::string const& pattern)
 	return std::search(text.begin(), text.end(),  pattern.begin(), pattern.end() ) != text.end();
 }
 
-std::vector<std::string> directoryEntries(const std::string &directory)
+std::vector<std::string> directoryEntries(const std::string &directory, FileType::FileType dirs)
 {
 	std::vector<std::string> result;
 	DIR *stream = opendir(directory.c_str());
@@ -95,8 +95,11 @@ std::vector<std::string> directoryEntries(const std::string &directory)
 	while ((entry = readdir(stream)) != NULL)
 	{
 		std::string name(entry->d_name);
-		if (name.size() > 0 && name.at(0) != '.')
+
+		if (name.size() > 0 && name.at(0) != '.' && (dirs == FileType::File && entry->d_type!=DT_DIR) || (dirs == FileType::Directory && entry->d_type!=DT_REG))
+		{
 			result.push_back(name);
+		}
 	}
 
 	closedir(stream);
