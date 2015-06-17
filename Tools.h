@@ -74,7 +74,7 @@ struct lang {
 	{
 		if (match(string, "_"))
 		{
-			country= alnums(string, string.find('_')+1);
+			country = alnums(string, string.find('_')+1);
 		}
 
 		if (match(string, "@"))
