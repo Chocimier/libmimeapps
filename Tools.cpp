@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Tools.h"
 
 #include <dirent.h>
+#include <sys/stat.h>
 
 #include <algorithm>
 #include <cstring>
@@ -91,12 +92,18 @@ std::vector<std::string> directoryEntries(const std::string &directory, FileType
 	}
 
 	struct dirent *entry;
+	struct stat info;
+	std::string name;
+	std::string path;
 
 	while ((entry = readdir(stream)) != NULL)
 	{
-		std::string name(entry->d_name);
+		name = entry->d_name;
+		path = directory + name;
 
-		if (name.size() > 0 && name.at(0) != '.' && ((dirs == FileType::File && entry->d_type!=DT_DIR) || (dirs == FileType::Directory && entry->d_type!=DT_REG)))
+		stat(path.c_str(), &info);
+
+		if (name.size() > 0 && name.at(0) != '.' && ((dirs == FileType::File && S_ISREG(info.st_mode)) || (dirs == FileType::Directory && S_ISDIR(info.st_mode))))
 		{
 			result.push_back(name);
 		}
