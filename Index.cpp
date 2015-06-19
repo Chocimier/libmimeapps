@@ -51,7 +51,7 @@ Index::Index(const std::string &language):
 	createBase();
 }
 
-std::vector<DesktopEntry> Index::appsForMime(const std::string &type)
+std::vector<DesktopEntry> Index::appsForMime(const std::string &type) const
 {
 	std::vector<DesktopEntry> result;
 

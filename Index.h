@@ -47,7 +47,7 @@ class Index
 public:
 	Index();
 	explicit Index(const std::string &language);
-	std::vector<DesktopEntry> appsForMime(const std::string &type);
+	std::vector<DesktopEntry> appsForMime(const std::string &type) const;
 
 protected:
 	void findDirectories();
