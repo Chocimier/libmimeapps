@@ -49,7 +49,6 @@ Index::Index(const std::string &language):
 {
 	findDirectories();
 	createBase();
-	removeUnused();
 }
 
 Index::~Index()
@@ -116,6 +115,8 @@ void Index::createBase()
 	{
 		processDirectory(directories_.at(i), std::string());
 	}
+
+	removeUnused();
 }
 
 void Index::processDirectory(const lookupDirectory &baseDirectory, const std::string &relative)
@@ -220,6 +221,7 @@ void Index::addToType(const std::string &type, DesktopEntry *entry)
 	}
 
 	applicationsCache_[type].push_front(entry);
+	entry->types_.push_back(type);
 }
 
 void Index::removeApplication(const std::string &entryId)
@@ -239,6 +241,23 @@ void Index::removeFromType(const std::string &type, const std::string &entryId)
 			if ((*it)->identifier() == entryId)
 			{
 				applicationsCache_.at(type).erase(it++);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
+	if (knownApplications_.count(entryId) > 0)
+	{
+		std::vector<std::string> &types = knownApplications_.at(entryId)->types_;
+
+		for (std::vector<std::string>::iterator it = types.begin(); it != types.end();)
+		{
+			if (*it == type)
+			{
+				types.erase(it);
 			}
 			else
 			{
