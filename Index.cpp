@@ -65,7 +65,7 @@ std::vector<DesktopEntry> Index::appsForMime(const std::string &type) const
 {
 	std::vector<DesktopEntry> result;
 
-	if (applicationsCache_.count(type) > 0)
+	if (applicationsCache_.find(type) != applicationsCache_.end())
 	{
 		std::list<DesktopEntry*> list = applicationsCache_.at(type);
 		for (std::list<DesktopEntry*>::iterator entry = list.begin(); entry != list.end(); ++entry)
@@ -163,7 +163,7 @@ void Index::processMimeApps(const std::string &path)
 
 		for (int j = identifiers.size()-1; j >= 0; --j)
 		{
-			if (knownApplications_.count(identifiers[j]) > 0)
+			if (knownApplications_.find(identifiers[j]) != knownApplications_.end())
 			{
 				addToType(types[i], knownApplications_.at(identifiers[j]));
 			}
@@ -215,7 +215,7 @@ void Index::addApplication(DesktopEntry *entry)
 
 void Index::addToType(const std::string &type, DesktopEntry *entry)
 {
-	if (applicationsCache_.count(type) > 0)
+	if (applicationsCache_.find(type) != applicationsCache_.end())
 	{
 		removeFromType(type, entry->identifier());
 	}
@@ -234,7 +234,7 @@ void Index::removeApplication(const std::string &entryId)
 
 void Index::removeFromType(const std::string &type, const std::string &entryId)
 {
-	if (applicationsCache_.count(type) > 0)
+	if (applicationsCache_.find(type) != applicationsCache_.end())
 	{
 		for (std::list<DesktopEntry*>::iterator it = applicationsCache_.at(type).begin(); it != applicationsCache_.at(type).end();)
 		{
@@ -249,7 +249,7 @@ void Index::removeFromType(const std::string &type, const std::string &entryId)
 		}
 	}
 
-	if (knownApplications_.count(entryId) > 0)
+	if (knownApplications_.find(entryId) != knownApplications_.end())
 	{
 		std::vector<std::string> &types = knownApplications_.at(entryId)->types_;
 
