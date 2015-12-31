@@ -257,7 +257,22 @@ void Index::removeFromType(const std::string &type, const std::string &entryId)
 		{
 			if (*it == type)
 			{
-				types.erase(it++);
+				if (it == types.begin())
+				{
+					types.erase(it);
+
+					it = types.begin();
+				}
+				else
+				{
+					std::vector<std::string>::iterator temp = it;
+					--temp;
+
+					types.erase(it);
+
+					it = ++temp;
+				}
+
 			}
 			else
 			{
