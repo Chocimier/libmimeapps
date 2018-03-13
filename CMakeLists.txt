@@ -11,3 +11,11 @@ add_library(mimeapps
 	Index.cpp
 	Tools.cpp
 )
+
+add_executable(test
+	main.cpp
+)
+
+target_link_libraries (test mimeapps)
+
+set_property(TARGET test PROPERTY CXX_STANDARD 11)
